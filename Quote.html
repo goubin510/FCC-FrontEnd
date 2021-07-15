@@ -1,0 +1,120 @@
+<!-- miniature : http://anto-gx.esy.es/image/Quote.png -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quote's page</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Courgette" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: "Raleway";
+        }
+        #sentence, .doubleQuote {
+            font-family: "Courgette";
+            font-size: 20px;
+            margin: auto;
+        }
+        .doubleQuote {
+            font-size: 40px;
+        }
+        #author {
+            text-align: right;
+            margin-top: 10px;
+            font-size: 15px;
+        }
+        #main {
+            display: block;
+            min-height: 200px;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 0;
+            margin-top: 200px;
+        }
+        button {
+            display: inline-block;
+            vertical-align: bottom;
+        }
+        #footer {
+            vertical-align: top;
+        }
+        body, button {
+            color: white;
+            background-color: #FE9800;  
+        }
+        #main {
+            color: #FE9800;
+            background-color: white;
+        }
+    </style>
+    <script>
+        $(document).ready(function(){
+            
+            
+            $.ajax({
+                url: "https://andruxnet-random-famous-quotes.p.mashape.com/",
+                type: "POST",
+                dataType: "json",
+                data: {
+                  "cat": "famous"  
+                },
+                headers: {
+                    "X-Mashape-Key": "73dPrTW28ZmshNNgOWUwwbYW9JBPp1fXus5jsnFra8Pykoag9p",
+                    "Accept": "application/json",
+                },
+                contentType: "application/x-www-form-urlencoded",
+                success: function(result){
+                    $("#sentence").text(result.quote);
+                    $("#author").text(result.author);
+                },
+                error: function(error){
+                    console.log(error);
+                }
+            });
+            
+            $("#requestButton").on("click", function(){
+                $.ajax({
+                    url: "https://andruxnet-random-famous-quotes.p.mashape.com/",
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                      "cat": "famous"  
+                    },
+                    headers: {
+                        "X-Mashape-Key": "73dPrTW28ZmshNNgOWUwwbYW9JBPp1fXus5jsnFra8Pykoag9p",
+                        "Accept": "application/json",
+                    },
+                    contentType: "application/x-www-form-urlencoded",
+                    success: function(result){
+                        $("#sentence").text(result.quote);
+                        $("#author").text(result.author);
+                    },
+                    error: function(error){
+                        console.log(error);
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+            <div id="main">
+                <span class="doubleQuote">"</span><span id="sentence"></span><span class="doubleQuote">"</span>
+                <p id="author"></p>
+                <button class="btn">Twitter</button>
+                <button id="requestButton" class="btn">New Quote</button>
+            </div>
+            <div id="footer">
+                <p>Made by AntoGx</p>
+            </div>
+        </div>
+        <div class="col-sm-4"></div>
+    </div>
+</body>
+</html>

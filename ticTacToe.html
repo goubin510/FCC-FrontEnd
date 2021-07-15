@@ -1,0 +1,241 @@
+<!-- miniature : http://anto-gx.esy.es/image/ticTacToe.png -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tic Tac Toe</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Courgette" rel="stylesheet">
+    
+    <style>
+        body {
+            background-color: #00FF90;
+            font-family: "Raleway";
+        }
+        #main {
+            display: inline-block;
+            margin-top: 150px;
+            margin-left: 40%;
+            padding: 10px;
+            border-radius: 8px;
+            
+            background-color: #2AAF53;
+        }
+        #status, #menu2, #game, #next {
+            display: none;
+        }
+        .plate {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 5px;
+            
+            vertical-align: top;
+            border-style: none;
+        }
+        #single, #multi,#cross, #circle, #status, #next {
+            border-style: none;
+            background-color: #2AAF53;
+            font-size: 20px;
+        }
+        #cross, #circle, .plate, span {
+            font-family: "Courgette";
+            font-size: 20px;
+        }
+        #status {
+            text-align: center;
+        }
+        .plate {
+            background-color: #47484B;
+            color: white;
+        }
+        span {
+            color: white;
+            margin-right: 20px;
+        }
+        #next {
+            margin-left: 50%;
+            
+            border-style: solid;
+            border-width: 1px;
+            border-radius: 5px;
+            border-color: #47484B;
+        }
+    </style>
+    <script>
+        var IA = false;
+        var winner = "";
+        var P1 = "none";
+        var P2 = "none";
+        var tour = "none";
+        var nbTour = 0;
+        var conv = {"cross": "X", "circle": "O"};
+        var association = {};
+        var gamePlate = [];
+    
+        $(document).ready(function(){
+            
+            $("#single").on("click", function(){
+                IA = true;
+                $("#menu").css("display", "none");
+                $("#menu2").css("display", "block");
+            });
+            
+            $("#multi").on("click", function(){
+                IA = false;
+                $("#menu").css("display", "none");
+                $("#menu2").css("display", "block");
+            });
+            
+            $("#cross").on("click", function(){
+                    P1 = "cross";
+                    P2 = "circle";
+                
+                $("#status").html("P1 : <span>" + conv[P1] + "</span> " + "P2 : <span>" + conv[P2] + "</span");
+                association = {"P1": "cross", "P2": "circle"};
+                tour = "P1";
+                
+                init();
+                
+                $("#menu2").css("display", "none");
+                $("#status").css("display", "block");
+                $("#game").css("display", "block");
+                
+            });
+            
+            $("#circle").on("click", function(){
+                    P1 = "circle";
+                    P2 = "cross";
+                
+                $("#status").html("P1 : <span>" + conv[P1] + "</span> " + "P2 : <span>" + conv[P2] + "</span");
+                association = {"P2": "cross", "P1": "circle"};
+                tour = "P1";
+                
+                init();
+                
+                $("#menu2").css("display", "none");
+                $("#status").css("display", "block");
+                $("#game").css("display", "block");
+                
+            });
+            
+            $(".plate").on("click", function(evt){
+                nbTour++;
+                
+                evt.currentTarget.disabled = true;
+                evt.currentTarget.textContent = conv[association[tour]];
+                var test = evt.currentTarget.value.split('-');
+                gamePlate[test[0]][test[1]] = tour;
+                
+                if(tour == "P1"){
+                    tour = "P2";
+                }else tour = "P1";
+                
+                if(IA && tour == "P2")
+                    IAplay();
+                
+                check();
+            });
+            
+            $("#next").on("click", function(){
+                reset();
+                $("#next").css("display", "none");
+            });
+        });
+        
+        function init(){
+            gamePlate = [];
+            for(var i = 0; i < 3; i++){
+                gamePlate.push(["none", "none", "none"]);
+            }
+            $(".plate").removeAttr("disabled");
+            $(".plate").text("");
+        }
+        
+        function check() {
+            
+            for(var i = 0; i < 3; i++){
+                if(gamePlate[i][0] == gamePlate[i][1] && gamePlate[i][1] == gamePlate[i][2] && gamePlate[i][0] != "none")
+                    winner = gamePlate[i][0];
+                if(gamePlate[0][i] == gamePlate[1][i] && gamePlate[1][i] == gamePlate[2][i] && gamePlate[0][i] != "none")
+                    winner = gamePlate[0][i];
+            }
+            
+            if(gamePlate[0][0] == gamePlate[1][1] && gamePlate[0][0] == gamePlate[2][2] && gamePlate[2][2] != "none")
+                winner = gamePlate[0][0];
+            if(gamePlate[0][2] == gamePlate[1][1] && gamePlate[0][2] == gamePlate[2][0] && gamePlate[2][0] != "none")
+                winner = gamePlate[0][2];
+            
+            if(winner){
+                $(".plate").attr("disabled", "true");
+                $("#next").css("display", "block");
+            }
+            
+            if(nbTour == 9){
+                alert('draw');
+                nbTour = 0;
+                init();
+            }
+        }
+        
+        function reset(){
+            nbTour = 0;
+            winner = "";
+            init();
+        }
+        
+        function IAplay(){
+            var cible = [];
+            
+            cible.push(parseInt(Math.random()*100)%3);
+            cible.push(parseInt(Math.random()*100)%3);
+            if(gamePlate[cible[0]][cible[1]] != "none"){
+                for(var i = 0; i < 3; i++){
+                    for(var j = 0; j < 3; j++){
+                        if(gamePlate[i][j] == "none"){
+                            cible[0] = i;
+                            cible[1] = j;
+                            j=3;
+                            i=3;
+                        }
+                    }
+                }
+            }
+            $("#" + cible[0] + cible[1]).trigger( "click" );
+        }
+        
+    </script>
+</head>
+<body>
+    <div id="main">
+        
+        <div id="menu">
+            <button id="single">Solo</button>
+            <button id="multi">Multi</button>
+        </div>
+        
+        <div id="menu2">
+            <button id="cross">X</button>
+            <button id="circle">O</button>
+        </div>
+        
+        <div id="status"></div>
+        
+        <div id="game">
+            <button value="0-0" id="00" class="plate"></button>
+            <button value="0-1" id="01" class="plate"></button>
+            <button value="0-2" id="02" class="plate"></button><br>
+            <button value="1-0" id="10" class="plate"></button>
+            <button value="1-1" id="11" class="plate"></button>
+            <button value="1-2" id="12" class="plate"></button><br>
+            <button value="2-0" id="20" class="plate"></button>
+            <button value="2-1" id="21" class="plate"></button>
+            <button value="2-2" id="22" class="plate"></button><br>
+        </div>
+        
+        <div id="next">Retry</div>
+        
+    </div>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!-- miniature : http://anto-gx.esy.es/image/calculator.png -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calculator</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: "Raleway";
+            background-image: url(https://wallpaperscraft.com/image/texture_white_fiber_background_fabric_50782_3840x2160.jpg);
+        }
+        .btn {
+            font-size: 30px;
+            margin: 5px;
+            width: 20%;
+            text-align: center;
+            padding: 0;
+            background-color: #42454C;
+        }
+        .btn:hover, .btn:focus {
+            color: grey;
+        }
+        #main {
+            background-color: bisque;
+            border-radius: 20px;
+            padding: 20px;
+            width: 320px;
+            margin: auto;
+            margin-top: 150px;
+        }
+        #input {
+            color: white;
+            text-align: left;
+        }
+        #output {
+            text-align: right;
+            font-size: 35px;
+            background-color: darkseagreen;
+            border-radius: 5px;
+            color: grey;
+            height: 90px;
+            overflow: auto;
+        }
+        .set {
+            width: 20%;
+        }
+        #result {
+            font-size: 15px;
+            height: 20px;
+            vertical-align: bottom;
+        }
+        #current {
+            height: 50px;
+            margin-bottom: 0px;
+        }
+        .scrt {
+            background-color: antiquewhite;
+        }
+        .zero {
+            width: 125px;
+        }
+    </style>
+    <script>
+        var equals = false;
+        
+        $(document).ready(function(){
+            
+            $(".num").on("click", function(evt){
+                if($("#current").text() == '0')
+                    $("#current").text("");
+                    
+                if(equals == true){
+                    $("#current").text("");
+                    $("#result").text("");
+                    equals = false;
+                }
+                
+                $("#current").text($("#current").text() + evt.currentTarget.value);
+            });
+            
+            $(".ope").on("click", function(evt){
+                if(equals == true){
+                    $("#result").text($("#current").text());
+                    $("#current").text("");
+                    equals = false;
+                }
+                $("#result").text($("#result").text() + $("#current").text() + evt.currentTarget.value);
+                $("#current").text("0");
+            });
+            
+            $("#end").on("click", function(evt){
+                $("#result").text($("#result").text() + $("#current").text());
+                $("#current").text(eval($("#result").text()));
+                $("#result").text($("#result").text() + evt.currentTarget.value + $("#current").text());
+                equals = true;
+            });
+            
+            $(".set").on("click", function(evt){
+                $("#current").text("0");
+                if(evt.currentTarget.value == "AC" || equals)
+                    $("#result").text("");
+            });
+            
+        });
+    </script>
+</head>
+<body>
+        
+        <div id="main">
+            
+            <div id="output">
+                <p id="current">0</p>
+                <p id="result"></p>
+            </div>
+
+            <div id="input">
+                <div>
+                    <button class="btn set" value="AC">AC</button>
+                    <button class="btn set" value="CE">CE</button>
+                    <button class="btn scrt"></button>
+                    <button class="btn ope" value="/">÷</button>
+                </div>
+                <div>
+                    <button class="btn num" value="7">7</button>
+                    <button class="btn num" value="8">8</button>
+                    <button class="btn num" value="9">9</button>
+                    <button class="btn ope" value="*">x</button>
+                </div>
+                <div>
+                    <button class="btn num" value="4">4</button>
+                    <button class="btn num" value="5">5</button>
+                    <button class="btn num" value="6">6</button>
+                    <button class="btn ope" value="+">+</button>
+                </div>
+                <div>
+                    <button class="btn num" value="1">1</button>
+                    <button class="btn num" value="2">2</button>
+                    <button class="btn num" value="3">3</button>
+                    <button class="btn ope" value="-">-</button>
+                </div>
+                <div>
+                    <button class="btn num zero" value="0">0</button>
+                    <button class="btn num" value=".">.</button>
+                    <button class="btn" value="=" id="end">=</button>
+                </div>
+            </div>
+            
+        </div>
+    
+</body>
+</html>

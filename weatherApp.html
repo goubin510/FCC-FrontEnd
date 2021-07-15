@@ -1,0 +1,186 @@
+<!-- miniature : http://anto-gx.esy.es/image/weatherApp.png -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Weather app</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.10/css/weather-icons.css" />
+
+    <script>
+        var weatherData = [["tornado","wi-tornado"],["tropical storm","wi-lightning"],["hurricane","wi-hurricane"],["severe thunderstorms","wi-thunderstorm"],["thunderstorms","wi-storm-showers"],["mixed rain and snow","wi-rain-mix"],["mixed rain and sleet","wi-sleet"],["mixed snow and sleet","wi-snow"],["freezing drizzle","wi-snowflake-cold"],["drizzle","wi-snowflake-cold"],["freezing rain","wi-rain-mix"],["showers","wi-rain"],["showers","wi-rain"],["snow flurries","wi-snow"],["light snow showers","wi-snow"],["blowing snow","wi-snow-wind"],["snow","wi-snow"],["hail","wi-hail"],["sleet","wi-sleet"],["dust","wi-dust"],["foggy","wi-smog"],["haze","day-haze"],["smoky","wi-fog"],["blustery","wi-windy"],["windy","wi-strong-wind"],["cold","wi-thermometer-exterior"],["cloudy","wi-cloudy"],["mostly cloudy (night)","wi-night-alt-cloudy"],["mostly cloudy (day)","wi-day-cloudy"],["partly cloudy (night)","wi-night-partly-cloudy"],["partly cloudy (day)","wi-day-cloudy-high"],["clear (night)","wi-night-clear"],["sunny","wi-day-sunny"],["fair (night)","wi-night-clear"],["fair (day)","wi-day-sunny"],["mixed rain and hail","wi-rain-mix"],["hot","wi-thermometer"],["isolated thunderstorms","wi-thunderstorm"],["scattered thunderstorms","wi-thunderstorm"],["scattered thunderstorms","wi-thunderstorm"],["scattered showers","wi-rain"],["heavy snow","wi-snow"],["scattered snow showers","wi-snow"],["heavy snow","wi-snow"],["partly cloudy","wi-cloud"],["thundershowers","wi-thunderstorm"],["snow showers","wi-snow"],["isolated thundershowers","wi-thunderstorm"]];
+        
+        var tempC = true;
+        
+        $(document).ready(function(){
+            $("button").on("click", function(){
+                if(tempC){
+                    tempC = false;
+                    var conv = $("#temp").text();
+                    conv = conv*9/5 + 32;
+                    
+                    $("#temp").text(conv);
+                    $("#tempC").removeClass("wi-celsius");
+                    $("#tempC").addClass("wi-fahrenheit");
+                    
+                    conv = $("#min").text();
+                    conv = conv*9/5 + 32;
+                    
+                    $("#min").text(conv);
+                    $("#tempCmin").removeClass("wi-celsius");
+                    $("#tempCmin").addClass("wi-fahrenheit");
+                    
+                    conv = $("#max").text();
+                    conv = conv*9/5 + 32;
+                    
+                    $("#max").text(conv);
+                    $("#tempCmax").removeClass("wi-celsius");
+                    $("#tempCmax").addClass("wi-fahrenheit");
+                }else {
+                    tempC = true;
+                    var conv = $("#temp").text();
+                    conv = Math.round((conv-32)*5/9);
+                    
+                    $("#temp").text(conv);
+                    $("#tempC").removeClass("wi-fahrenheit");
+                    $("#tempC").addClass("wi-celsius");
+                    
+                    conv = $("#min").text();
+                    conv = Math.round((conv-32)*5/9);
+                    
+                    $("#min").text(conv);
+                    $("#tempCmin").removeClass("wi-celsius");
+                    $("#tempCmin").addClass("wi-fahrenheit");
+                    
+                    conv = $("#max").text();
+                    conv = Math.round((conv-32)*5/9);
+                    
+                    $("#max").text(conv);
+                    $("#tempCmax").removeClass("wi-celsius");
+                    $("#tempCmax").addClass("wi-fahrenheit");
+                }
+            })
+        });
+        
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                
+                $.ajax({
+                    url: "https://simple-weather.p.mashape.com/weatherdata",
+                    type: "GET",
+                    dataType: "json",
+                    data: {
+                        "lat": position.coords.latitude,
+                        "lng": position.coords.longitude
+                    },
+                    headers: {
+                        "X-Mashape-Key": "73dPrTW28ZmshNNgOWUwwbYW9JBPp1fXus5jsnFra8Pykoag9p",
+                        "Accept": "application/json",
+                    },
+                    success: function(result){
+                        var data = result.query.results.channel;
+                        tempC = true;
+                        
+                        $("#town").text(data.location.city);
+                        $("#country").text(data.location.country);
+                        $("#temp").text(data.item.condition.temp);
+                        $("#status").text(data.item.condition.text);
+                        
+                        $("#emo").removeClass("wi-day-sunny");
+                        $("#emo").addClass(weatherData[data.item.condition.code][1]);
+                        $("#sunrise").text(data.astronomy.sunrise);
+                        $("#sunset").text(data.astronomy.sunset);
+                        
+                        $("#day").text(data.item.forecast[0].day);
+                        $("#date").text(data.item.forecast[0].date);
+                        $("#max").text(data.item.forecast[0].high);
+                        $("#min").text(data.item.forecast[0].low);
+                        
+                    },
+                    error: function(error){
+                        console.log("error");
+                        console.log(error);
+                    }
+                });
+            });
+        }
+    </script>
+    <style>
+        body {
+            background-image: url(http://www.cray.com/blog/wp-content/uploads/2015/09/Weather-Blog-Image.jpg);
+            background-repeat: no-repeat;
+            background-size: 100% auto;
+            background-color: #323536;
+            color: white;
+            font-family: "Raleway";
+            vertical-align: top;
+            font-size: 20px;
+        }
+        .icone {
+            font-size: 40px;
+        }
+        #main {
+            background-color: RGBA(50, 53, 54, 0.7);
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 150px;
+        }
+        h1 {
+            text-align: center;
+        }
+        #dateDiv, #tempPrev {
+            float: right;
+        }
+        #temp {
+            margin-left: 80px;
+        }
+        #sunrise {
+            margin-right: 10px;
+        }
+        #town{
+            font-size: 30px;
+        }
+        button {
+            background-color: rgba(0,0,0,0);
+            border-style: none;
+        }
+        button:hover{
+            color: white;
+            background-color: RGBA(50, 53, 54, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+            <div id="main">
+                <h1>Weather App</h1>
+                
+                <div id="dateDiv"><span id="day">Wed</span> <span id="date">23 Nov 2016</span></div>
+                
+                <p>
+                    <span id="town">Saint-Malo</span>, <span id="country">France</span>
+                </p>
+                
+                <div id="tempPrev">max : <span id="max">20</span><span id="tempCmin" class="wi wi-celsius"></span> min : <span id="min">15</span><span id="tempCmax" class="wi wi-celsius"></span></div>
+                
+                <p>
+                    <span id="emo" class="wi wi-day-sunny icone"></span><span id="temp">15</span><button id="tempC" class="wi wi-celsius btn" style="font-size: 30px;"></button>
+                </p>
+                
+                <p><span id="status">Sunny</span></p>
+                
+                <p>
+                    <span class="wi wi-sunrise icone"></span> : <span id="sunrise">7:00 am</span>
+                    <span class="wi wi-sunset icone"></span> : <span id="sunset">19:00</span>
+                </p>
+                
+            </div>
+        </div>
+        <div class="col-sm-3"></div>
+    </div>
+</body>
+</html>

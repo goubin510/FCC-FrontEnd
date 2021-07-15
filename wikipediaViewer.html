@@ -1,0 +1,135 @@
+<!-- miniature : http://anto-gx.esy.es/image/wikipediaViewer.png -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Wikipedia search</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: "Raleway";
+            background-image: url(https://norbertbol.files.wordpress.com/2016/05/knowledgesahring.jpg);
+            background-repeat: no-repeat;
+            background-size: 100% auto;
+            background-color: #0C343A;
+        }
+        a, a:hover, a:visited, a:focus {
+            margin: 30px;
+            margin-bottom: 10px;
+            color: white;
+            text-decoration: none;
+        }
+        a:active {
+            color: #F6F6F6;
+            text-decoration: none;
+        }
+        #menu {
+            margin-top: 150px;
+            background-color: RGBA(50, 53, 54, 0.9);
+            border-radius: 5px;
+            color: white;
+            margin-bottom: 20px;
+        }
+        input {
+            color: RGBA(50, 53, 54, 1);
+            margin: 20px;
+            margin-right: 0px;
+        }
+        button {
+            background-color: RGBA(50, 53, 54, 0);
+            border-style: solid;
+            border-width: 1px;
+            border-color: white;
+        }
+        #searchResult a {
+            color: white;
+        }
+        .title {
+            font-size: 20px;
+        }
+        .well {
+            background-color: RGBA(50, 53, 54, 0.9);
+            color: white;
+            border-style: none;
+        }
+    </style>
+    <script>
+        function next(){
+            var search = "", request = "";
+            
+            search = $("#userIdInput").val();
+            search = search.split(' ');
+            search = search.join('+');
+            
+            request = "https://en.wikipedia.org/w/api.php?format=json&action=query&generator=search&gsrnamespace=0&gsrlimit=10&prop=pageimages|extracts&pilimit=max&exintro&explaintext&exsentences=1&exlimit=max&gsrsearch=" + search;
+            
+            $("#menu").css("margin-top", 10 + "px");
+            
+            $.ajax({
+                url: request,
+                type: "GET",
+                dataType: "jsonp",
+                contentType: "application/json",
+                success: function(result){
+                    if(result.query){
+                        var data = result.query.pages;
+                        var array = Object.keys(data);
+                    
+                        var toAdd = "";
+                        $("#searchResult").html("");
+                        for(var i = 0; i < array.length; i++){
+                            toAdd += "<div class='sample well'><a href='https://en.wikipedia.org/?curid=" + data[array[i]].pageid + "'>";
+                            toAdd += "<p class='title'>" + data[array[i]].title + "</p>";
+                            toAdd += "<p class='content'>" + data[array[i]].extract + "</p>";
+                            toAdd += "</a></div>";
+                        }
+                        $("#searchResult").html(toAdd);
+                        
+                    }else{
+                        $("#searchResult").html("<div class='sample well'>Nothing found...</div>");
+                    }
+                },
+                error: function(error){
+                    console.log(error);
+                }
+            });
+
+
+        }
+        
+        function listening(evt){
+            if(window.event) { // IE                    
+              if(evt.keyCode == 13)
+                next();
+            } else if(evt.which){ // Netscape/Firefox/Opera                   
+              if(evt.which == 13)
+                next();
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+            <div id="menu">
+                <a target="_blank" href="https://en.wikipedia.org/wiki/Special:Random">randdom wikipedia article</a>
+                <input type="text" id="userIdInput" onkeydown="listening(event)" autofocus>
+                <button class="btn" onclick="next()">Search</button>
+            </div>
+        </div>
+        <div class="col-sm-4"></div>
+    </div>
+    
+    <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+            <div id="searchResult"></div>
+        </div>
+        <div class="col-sm-2"></div>
+    </div>
+</body>
+</html>

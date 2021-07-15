@@ -1,0 +1,255 @@
+<!-- miniature : http://anto-gx.esy.es/image/simonGame.png -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simon Game</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    
+    <style>
+        body {
+            background-color: #EAD3B2;
+            font-family: "Raleway";
+        }
+        .plate {
+            position: absolute;
+            
+            background-color: white;
+            border-style: solid;
+            border-radius: 5px;
+            border-width: 1px;
+        }
+        #main {
+            width: 400px;
+            height: 400px;
+            margin: auto;
+            margin-top: 50px;
+            
+            background-color: #47484B;
+            border-radius: 50%;
+        }
+        span {
+            margin-left: 10px;
+        }
+        button {
+            border-style: none;
+        }
+        #status {
+            position: absolute;
+            z-index: 2;
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            
+            margin-left: 75px;
+            margin-top: 75px;
+            
+            background-color: #47484B;
+        }
+        #start, #strict, #step {
+            position: absolute;
+            margin-top: 25%;
+            margin-left: 25%;
+            
+            border-style: solid;
+            border-color: lightgrey;
+            border-width: 1px;
+            border-radius: 5px;
+            
+            padding: 5px;
+            
+            color: lightgrey;
+            background-color: #47484B;
+        }
+        #strict {
+            margin-left: 50%;
+        }
+        #step {
+            margin-left: 50%;
+            margin-top: 50%;
+            
+            color: white;
+        }
+        #num0 {
+            z-index: 0;
+            border-style: none;
+            height: 190px;
+            width: 190px;
+            margin: 5px;
+            margin-top: 7px;
+            margin-left: 7px;
+            border-radius: 100% 0 0 0;
+            background-color: greenyellow;
+        }
+        #num1 {
+            z-index: 0;
+            border-style: none;
+            height: 190px;
+            width: 190px;
+            margin: 5px;
+            margin-left: 202px;
+            margin-top: 7px;
+            border-radius: 0 100% 0 0;
+            background-color: orangered;
+        }
+        #num2 {
+            z-index: 0;
+            border-style: none;
+            height: 190px;
+            width: 190px;
+            margin: 5px;
+            margin-top: 202px;
+            margin-left: 202px;
+            border-radius: 0 0 100% 0;
+            background-color: dodgerblue;
+        }
+        #num3 {
+            z-index: 0;
+            border-style: none;
+            height: 190px;
+            width: 190px;
+            margin: 5px;
+            margin-top: 202px;
+            margin-left: 7px;
+            border-radius: 0 0 0 100%;
+            background-color: yellow;
+        }
+        h1 {
+            color: #47484B;
+            text-align: center;
+        }
+    </style>
+    <script>
+        var suite = [];
+        var compa = [];
+        var running;
+        var counter = 0;
+        var strictBool = false;
+        
+        $(document).ready(function(){
+            
+            $("#start").on("click", function() {
+                var suite = [];
+                var compa = [];
+                add();
+                setTimeout(boucle, 1000);
+            });
+            
+            $("#strict").on("click", function() {
+                if(strictBool){
+                    strictBool = false;
+                    $("#strict").css("background-color", "#47484B");
+                    $("#strict").css("color", "lightgrey");
+                }else{
+                    strictBool = true;
+                    $("#strict").css("background-color", "green");
+                    $("#strict").css("color", "white");
+                }
+            });
+            
+            $(".plate").on("click", function(evt) {
+                var test = evt.currentTarget.id;
+                compa.push(test[3]);
+                
+                if(compa.length == suite.length){
+                    $(".plate").attr("disabled", "true");
+                    var current = true;
+                    
+                    for(i = 0; i < compa.length; i++)
+                        if(compa[i] != suite[i])
+                            current = false;
+                    
+                    if(current){
+                        compa = [];
+                        add();
+                        setTimeout(boucle, 1000);
+                        
+                    }else if(!current && strictBool){
+                        compa = [];
+                        suite = [];
+                        add();
+                        setTimeout(boucle, 1000);
+                        
+                    }else{
+                        compa = [];
+                        setTimeout(boucle, 1000);
+                    }
+                }
+            });
+            
+        });
+        
+        function boucle() {
+            $("#step").text(suite.length);
+            
+            $(".plate").attr("disabled", "true");
+            counter = 0;
+            show();
+        }
+        
+        function show(){
+            $("#num0").css("background-color", "greenyellow");
+            $("#num1").css("background-color", "orangered");
+            $("#num2").css("background-color", "dodgerblue");
+            $("#num3").css("background-color", "yellow");
+            
+            switch(suite[counter]){
+                case 0:
+                    $("#num" + suite[counter]).css("background-color", "RGBA(138, 255, 32, 0.8)");
+                    break;
+                case 1:
+                    $("#num" + suite[counter]).css("background-color", "RGBA(255, 0, 0, 0.8)");
+                    break;
+                case 2:
+                    $("#num" + suite[counter]).css("background-color", "RGBA(2, 135, 255, 0.8)");
+                    break;
+                case 3:
+                    $("#num" + suite[counter]).css("background-color", "RGBA(249, 255, 0, 0.8)");
+                    break;
+            }
+            
+            counter++;
+            if(counter <= suite.length)
+                running = setTimeout(show, 1000);
+            else{
+                clearTimeout(running);
+                running = 0;
+                $("#num0").css("background-color", "greenyellow");
+                $("#num1").css("background-color", "orangered");
+                $("#num2").css("background-color", "dodgerblue");
+                $("#num3").css("background-color", "yellow");
+                $(".plate").removeAttr("disabled");
+            }
+        }
+        
+        function add(){
+            suite.push(parseInt(Math.random()*100)%4);
+        }
+        
+        
+    </script>
+</head>
+<body>
+    
+    <h1>Simon's game</h1>
+    
+    <div id="main">
+        
+        <div id="status">
+            <button id="start">Start</button>
+            <button id="strict">Strict</button>
+            <span id="step"></span>
+        </div>
+        
+        <div id="game">
+            <button class="plate" id="num0"></button>
+            <button class="plate" id="num1"></button>
+            <button class="plate" id="num2"></button>
+            <button class="plate" id="num3"></button>
+        </div>
+        
+    </div>
+</body>
+</html>
