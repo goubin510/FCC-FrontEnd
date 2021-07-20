@@ -1,0 +1,60 @@
+<!-- https://medium.com/@braindoggies/the-super-obvious-sign-that-its-time-to-quit-your-job-68f75ca7cd6a?source=email-97621e75001c-1626744103189-digest.reader--68f75ca7cd6a----2-74------------------0c99dfbd_af78_4068_a3b1_7da3582006ba-1-10f69aeb_8a9a_4ff8_8664_fdaf6653f68f -->
+
+<!-- miniature : http://anto-gx.esy.es/image/ObamaTributePage.png -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Medium Readers</title>
+    <meta charset="utf-8">
+	
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Courgette" rel="stylesheet">
+    
+    <style>
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Medium Reader</h1>
+    </div>
+	
+    <div class="container">
+        <input type="text" id="input">
+		<button id="test">test</button>
+		<br/>
+		<a target="_blank" id="output">Medium link</a>
+    </div>
+
+</body>
+    <script>
+		console.log("test")
+		
+		$("#test").click(function(){
+			changeHref();
+		});
+		$("#input").change(function(){
+			changeHref();
+		});
+		
+		var changeHref = function () {
+			var newLink = $("#input").val().split("?source")[0];
+			
+			$("#output").attr("href", newLink);
+		}
+		
+		
+	</script>
+</html>

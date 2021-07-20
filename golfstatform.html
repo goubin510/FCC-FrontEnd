@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Golf Stat form</title>
+    <meta charset="utf-8">
+	
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+	<!-- Popper JS -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+	<!-- Latest compiled JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Courgette" rel="stylesheet">
+    
+    <style>
+
+	/* form starting stylings ------------------------------- */
+	.group 			  { 
+	  position:relative; 
+	  margin-bottom:45px; 
+	}
+	input 				{
+	  font-size:18px;
+	  padding:10px 10px 10px 5px;
+	  display:block;
+	  width:300px;
+	  border:none;
+	  border-bottom:1px solid #757575;
+	}
+	input:focus 		{ outline:none; }
+
+	/* LABEL ======================================= */
+	label 				 {
+	  color:#999; 
+	  font-size:18px;
+	  font-weight:normal;
+	  position:absolute;
+	  pointer-events:none;
+	  left:5px;
+	  top:10px;
+	  transition:0.2s ease all; 
+	  -moz-transition:0.2s ease all; 
+	  -webkit-transition:0.2s ease all;
+	}
+
+	/* active state */
+	input:focus ~ label, input:valid ~ label 		{
+	  top:-20px;
+	  font-size:14px;
+	  color:#5264AE;
+	}
+
+	/* BOTTOM BARS ================================= */
+	.bar 	{ position:relative; display:block; width:300px; }
+	.bar:before, .bar:after 	{
+	  content:'';
+	  height:2px; 
+	  width:0;
+	  bottom:1px; 
+	  position:absolute;
+	  background:#5264AE; 
+	  transition:0.2s ease all; 
+	  -moz-transition:0.2s ease all; 
+	  -webkit-transition:0.2s ease all;
+	}
+	.bar:before {
+	  left:50%;
+	}
+	.bar:after {
+	  right:50%; 
+	}
+
+	/* active state */
+	input:focus ~ .bar:before, input:focus ~ .bar:after {
+	  width:50%;
+	}
+
+	/* HIGHLIGHTER ================================== */
+	.highlight {
+	  position:absolute;
+	  height:60%; 
+	  width:100px; 
+	  top:25%; 
+	  left:0;
+	  pointer-events:none;
+	  opacity:0.5;
+	}
+
+	/* active state */
+	input:focus ~ .highlight {
+	  -webkit-animation:inputHighlighter 0.3s ease;
+	  -moz-animation:inputHighlighter 0.3s ease;
+	  animation:inputHighlighter 0.3s ease;
+	}
+
+	/* ANIMATIONS ================ */
+	@-webkit-keyframes inputHighlighter {
+	  from { background:#5264AE; }
+	  to 	{ width:0; background:transparent; }
+	}
+	@-moz-keyframes inputHighlighter {
+	  from { background:#5264AE; }
+	  to 	{ width:0; background:transparent; }
+	}
+	@keyframes inputHighlighter {
+	  from { background:#5264AE; }
+	  to 	{ width:0; background:transparent; }
+	}
+    </style>
+	
+    <script>
+	</script>
+</head>
+<body>
+	<div class="jumbotron">
+		<h1>Bootstrap Tutorial</h1>
+		<p>Bootstrap is the most popular HTML, CSS...</p>
+	</div>
+	<div>
+		<button type="button" class="btn btn-success">Success</button>
+	</div>
+	<div class="progress">
+		<div class="progress-bar" style="width:70%">70%</div>
+	</div>
+	<div class="spinner-border text-success"></div>
+	
+	<div class="alert alert-success alert-dismissible fade show">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		<strong>Success!</strong> Indicates a successful or positive action.
+	</div>
+<!--	<div class="alert alert-success alert-dismissible">		-->
+	<div class="alert alert-danger alert-dismissible fade show">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		<strong>An error Occured!</strong> Data might not have been loaded
+	</div>
+	
+<button data-toggle="collapse" data-target="#demo">Collapsible</button>
+
+<div id="demo" class="collapse">
+Lorem ipsum dolor text....
+</div>
+	
+	
+<div class="container">
+	
+  <form>
+    
+	<div class="group">
+		<input type="text" required>
+		<span class="highlight"></span>
+		<span class="bar"></span>
+		<label>Name</label>
+	</div>
+      
+	<div class="group">      
+		<input type="text" required>
+		<span class="highlight"></span>
+		<span class="bar"></span>
+	<label>Email</label>
+	</div>
+	  
+	  <div>
+	  <p>Email
+	<select class="form-control" id="sel1">
+		<option>3</option>
+		<option>4</option>
+		<option>5</option>
+	</select>
+		  </p>
+	  </div>
+	  
+	  <div>
+	  <p>Email
+	<select class="form-control" id="sel1">
+		<option>0</option>
+		<option>1</option>
+		<option>2</option>
+		<option>3</option>
+		<option>4</option>
+		<option>5</option>
+	</select>
+		  </p>
+	  </div>
+	  
+  </form>
+    <input type="range" id="defaultRange" name="points2">
+    <p><button type="submit" class="btn btn-primary">Submit</button></p>
+</div>
+	
+</body>
+</html>
